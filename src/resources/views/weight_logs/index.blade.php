@@ -2,7 +2,18 @@
 
 
 @section('content')
+
+<p><a href="{{ route('weight_logs.create') }}">体重を登録する</a></p>
+
+<p><a href="{{ route('weight_targets.edit') }}">目標体重を設定</a></p>
+
 <h1>体重管理画面</h1>
+
+@if($target)
+<p>目標体重：{{ $target->target_weight }} kg</p>
+@else
+<p>目標体重：未設定</p>
+@endif
 
 @if($logs->isEmpty())
 <p>まだ記録がありません。</p>
@@ -10,6 +21,14 @@
     <ul>
         @foreach($logs as $log)
             <li>{{ $log->date }}：{{ $log->weight }}kg（{{ $log->calories }}kcal）</li>
+            
+            <a href="{{ route('weight_logs.edit', $log) }}">編集</a>
+
+            <form action="{{ route('weight_logs.destroy', $log) }}" method="POST" style="display:inline">
+              @csrf
+              @method('DELETE')
+              <button type="submit">削除</button>
+            </form>
         @endforeach
     </ul>
 @endif
@@ -25,33 +44,3 @@
 </ul>
 @endif
 
-<form action="{{ route('weight_logs.store') }}" method="POST">
-  @csrf
-
-  <div>
-    <label>日付</label>
-    <input type="date" name="date">
-  </div>
-
-  <div>
-    <label>体重 (kg)</label>
-    <input type="number" step="0.1" name="weight">
-  </div>
-
-  <div>
-    <label>摂取カロリー</label>
-    <input type="number" name="calories">
-  </div>
-
-  <div>
-    <label>運動時間</label>
-    <input type="time" name="exercise_time">
-  </div>
-
-  <div>
-    <label>運動内容</label>
-    <textarea name="exercise_content"></textarea>
-  </div>
-
-  <button type="submit">登録</button>
-</form>
