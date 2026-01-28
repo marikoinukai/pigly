@@ -4,22 +4,17 @@
     <meta charset="UTF-8">
     <title>体重管理アプリ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
 </head>
-<body>
+<body class="app-bg @yield('body_class')">
+    <main class="app-main">
+        <div class="app-container">
+            @yield('content')
+        </div>
+    </main>
 
-<header>
-    <h1>体重管理アプリ</h1>
-    <hr>
-</header>
-
-<main>
-    @yield('content')
-</main>
-
-<footer>
-    <hr>
-    <p>© Pigly</p>
-</footer>
-
+    @yield('scripts')
 </body>
 </html>

@@ -17,15 +17,25 @@ use App\Http\Controllers\WeightTargetController;
 |
 */
 
+// 最後に削除↓
+Route::get('/dev-login', function () {
+    $user = User::first(); // 1人目のユーザーでログイン（適宜変更）
+    Auth::login($user);
+    return redirect()->route('weight_logs.index');
+});
+// ↑最後に削除
+
+Route::get('/weight_logs/goal_setting', [WeightTargetController::class, 'edit'])
+    ->middleware('auth')
+    ->name('weight_targets.edit');
+
+Route::post('/weight_logs/goal_setting', [WeightTargetController::class, 'update'])
+    ->middleware('auth')
+    ->name('weight_targets.update');
+
 Route::get('/weight_logs', [WeightLogController::class, 'index'])
     ->middleware('auth')
     ->name('weight_logs.index');
-
-Route::get('/dev-login', function () {
-    $user = User::first(); // 1件目を使う（昨日作った test ユーザー）
-    Auth::login($user);
-    return redirect('/weight_logs');
-});
 
 Route::get('/weight_logs/create', [WeightLogController::class, 'create'])
     ->middleware('auth')
@@ -39,29 +49,8 @@ Route::get('/weight_logs/{weightLog}/edit', [WeightLogController::class, 'edit']
     ->middleware('auth')
     ->name('weight_logs.edit');
 
-
-Route::put('/weight_logs/{weightLog}', [WeightLogController::class, 'update'])
-    ->middleware('auth')
-    ->name('weight_logs.update');
-
-
-Route::delete('/weight_logs/{weightLog}', [WeightLogController::class, 'destroy'])
-    ->middleware('auth')
-    ->name('weight_logs.destroy');
-
-// 課題仕様用（追加）
 Route::post('/weight_logs/{weightLog}/update', [WeightLogController::class, 'update'])
     ->middleware('auth');
 
 Route::post('/weight_logs/{weightLog}/delete', [WeightLogController::class, 'destroy'])
     ->middleware('auth');
-
-// 課題仕様用（追加）ここまで
-
-Route::get('/weight_logs/goal_setting', [WeightTargetController::class, 'edit'])
-    ->middleware('auth')
-    ->name('weight_targets.edit');
-
-Route::post('/weight_logs/goal_setting', [WeightTargetController::class, 'update'])
-    ->middleware('auth')
-    ->name('weight_targets.update');

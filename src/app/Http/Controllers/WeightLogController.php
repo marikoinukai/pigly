@@ -10,13 +10,32 @@ class WeightLogController extends Controller
 {
     public function index()
     {
-        $logs = WeightLog::where('user_id', auth()->id())
-            ->orderBy('date', 'desc')
-            ->get();
+        $query = WeightLog::where('user_id', auth()->id());
+
+        // 検索（from/to）
+        if (request('from')) {
+            $query->whereDate('date', '>=', request('from'));
+        }
+        if (request('to')) {
+            $query->whereDate('date', '<=', request('to'));
+        }
+
+        $logs = $query->orderBy('date', 'desc')->paginate(8);
 
         $target = WeightTarget::where('user_id', auth()->id())->first();
 
-        return view('weight_logs.index', compact('logs', 'target'));
+        // 目標までの差分
+        $latestWeight = $logs->first() ? $logs->first()->weight : null;
+        $targetWeight = $target ? $target->target_weight : null;
+
+        $diffToTarget = null;
+        if (!is_null($latestWeight) && !is_null($targetWeight)) {
+            $diffToTarget = round($latestWeight - $targetWeight, 1);
+        }
+
+        $count = $logs->count();
+
+        return view('weight_logs.index', compact('logs', 'target', 'diffToTarget', 'count'));
     }
 
     public function store(StoreWeightLogRequest $request)
@@ -46,7 +65,7 @@ class WeightLogController extends Controller
             abort(403);
         }
 
-        return view('weight_logs.edit', ['log' => $weightLog]);
+        return view('weight_logs.edit', compact('weightLog'));
     }
 
     public function update(StoreWeightLogRequest $request, WeightLog $weightLog)
