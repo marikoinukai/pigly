@@ -45,12 +45,11 @@ Route::post('/weight_logs', [WeightLogController::class, 'store'])
     ->middleware('auth')
     ->name('weight_logs.store');
 
-Route::get('/weight_logs/{weightLog}/edit', [WeightLogController::class, 'edit'])
-    ->middleware('auth')
-    ->name('weight_logs.edit');
+Route::get('/weight_logs/{weightLog}', [WeightLogController::class, 'show'])
+    ->name('weight_logs.show');
 
 Route::post('/weight_logs/{weightLog}/update', [WeightLogController::class, 'update'])
-    ->middleware('auth');
+    ->name('weight_logs.update');
 
 Route::post('/weight_logs/{weightLog}/delete', [WeightLogController::class, 'destroy'])
     ->middleware('auth');

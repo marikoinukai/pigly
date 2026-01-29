@@ -67,12 +67,9 @@ class WeightLogController extends Controller
         return redirect()->route('weight_logs.index');
     }
 
-    public function edit(WeightLog $weightLog)
+    public function show(WeightLog $weightLog)
     {
-        // 自分のデータ以外を編集できないようにする
-        if ($weightLog->user_id !== auth()->id()) {
-            abort(403);
-        }
+        if ($weightLog->user_id !== auth()->id()) abort(403);
 
         return view('weight_logs.edit', compact('weightLog'));
     }

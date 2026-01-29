@@ -33,27 +33,11 @@
     margin: 0 0 20px;
 }
 
-/* ===== フォーム ===== */
-.form-group {
-    margin-bottom: 18px;
-}
-
 .form-label {
     display: block;
     margin-bottom: 6px;
     font-weight: 600;
 }
-
-/* 必須バッジ */
-/* .modal-card .required-badge {
-    display: inline-block;
-    margin-left: 6px;
-    padding: 2px 6px;
-    font-size: 11px;
-    color: #fff;
-    background: #ff4d4f;
-    border-radius: 4px;
-} */
 
 /* 単位付きinput */
 .input-unit {
@@ -582,4 +566,184 @@
 .modal-card .form-input,
 .modal-card textarea {
     width: 100%;
+}
+
+.form-group {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.modal-error {
+    margin: 0;
+    font-size: 12px;
+    color: #e00000;
+    line-height: 1.4;
+}
+
+/* ===== 編集画面だけ：中央寄せレイアウトに戻す ===== */
+.dashboard .edit-page.app-main {
+    justify-content: center;
+    align-items: center;
+    padding-top: 24px;
+}
+
+.dashboard .edit-page .app-container {
+    max-width: 520px;
+    /* 元の幅 */
+    width: 100%;
+    padding: 24px;
+    /* 元の余白 */
+    box-sizing: border-box;
+}
+
+/* 戻るボタン（ゴースト） */
+.btn-ghost {
+    width: 160px;
+    height: 44px;
+    padding: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f4f4f4;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+
+    text-decoration: none;
+    /* ← 下線を消す */
+    box-sizing: border-box;
+}
+
+.btn-ghost:hover {
+    background: #eee;
+}
+
+/* 編集画面のカード */
+.edit-page .card {
+    width: min(520px, calc(100vw - 32px));
+    margin: 0 auto;
+    position: relative;
+    padding: 28px;
+    padding-bottom: 72px;
+    /* 右下のゴミ箱分 */
+}
+
+/* ついで：中のフォーム要素を幅100%に（見本に近づく） */
+.edit-page input,
+.edit-page textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.delete-form {
+    position: absolute;
+    right: 24px;
+    bottom: 24px;
+    margin: 0;
+}
+
+.delete-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+}
+
+.delete-btn:hover {
+    opacity: .7;
+}
+
+/* 編集画面：入力欄を見本の幅感に（全幅すぎ問題を解消） */
+.edit-page .card input,
+.edit-page .card textarea {
+    width: 100%;
+    max-width: 100%;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 10px 12px;
+    box-sizing: border-box;
+}
+
+/* 編集画面：.card .btn-primary の「margin:18px auto 0」「display:block」を無効化 */
+.edit-page .form-actions .btn-primary {
+    margin: 0;
+    display: flex;
+}
+
+/* form-actions は grid で固定（これ1個に統一） */
+.edit-page .form-actions {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: 160px 160px;
+    justify-content: center;
+    gap: 24px;
+    align-items: center;
+}
+
+/* 戻る/更新を同じ箱に */
+.edit-page .form-actions .btn {
+    width: 160px;
+    height: 44px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* モーダル本体：パディングを調整して中の要素が詰まらないようにする */
+.modal-card {
+    width: min(520px, calc(100vw - 32px));
+    background: #fff;
+    border-radius: 10px;
+    /* 角丸を復活させる場合 */
+    padding: 30px 40px;
+    /* 左右の余白を少し広げると見栄えが良くなります */
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .15);
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+/* タイトル：下の余白を広げて入力欄との距離を作る */
+.modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    /* 14pxから24pxに広げる */
+    color: #333;
+}
+
+/* 各入力フィールド：上下の余白を確保する */
+.modal-field {
+    margin-bottom: 20px;
+    /* 8pxから20pxに広げる */
+}
+
+/* ラベル：テキストとバッジの横並びを整え、入力欄との隙間を作る */
+.modal-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    /* ラベルと入力欄の間の余白 */
+    font-size: 14px;
+    /* 少し大きくすると読みやすいです */
+    font-weight: 600;
+}
+
+/* 必須バッジ：文字のベースラインを整える */
+.modal-card .required-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 6px;
+    font-size: 10px;
+    height: 18px;
+    /* 高さを固定すると並びが綺麗になります */
 }

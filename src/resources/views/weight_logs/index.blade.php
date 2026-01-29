@@ -109,7 +109,7 @@
                             @endif
                         </td>
                         <td class="edit-col">
-                        <a class="edit-link" href="{{ route('weight_logs.edit', $log) }}">✎</a>
+                        <a class="edit-link" href="{{ route('weight_logs.show', $log) }}">✎</a>
                         </td>
                     </tr>
                     @empty
