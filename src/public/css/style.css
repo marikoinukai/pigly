@@ -323,7 +323,12 @@ textarea {
 
 .edit-link {
     text-decoration: none;
-    color: #d36ad6;
+    display: inline-block;
+    transform: scaleX(-1);
+    font-size: 16px;
+    background: linear-gradient(90deg, #ff7bbd, #7b8cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .empty {
@@ -365,4 +370,106 @@ textarea {
     .search-input {
         min-width: 0;
     }
+}
+
+/* pagination */
+.pigly-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 18px;
+}
+
+.pigly-pagination__list {
+    align-items: center;
+    margin: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.pigly-pagination__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+    color: #777;
+    background: #fff;
+    border: none;
+}
+
+.pigly-pagination__link:hover {
+    background: #f7f7f7;
+}
+
+.pigly-pagination__link.is-active {
+    background: linear-gradient(90deg, #7b8cff, #ff7bbd);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(123, 140, 255, 0.35);
+}
+
+.pigly-pagination__link.is-disabled {
+    color: #bbb;
+    background: #fff;
+    border-color: #eee;
+    pointer-events: none;
+}
+
+/* ＜ ＞（最初と最後）だけ濃くする */
+.pigly-pagination__list>li:first-child .pigly-pagination__link,
+.pigly-pagination__list>li:last-child .pigly-pagination__link {
+    color: #555;
+}
+
+/* ===== モーダル ===== */
+
+/* 普段は非表示 */
+.modal-overlay {
+    display: none;
+}
+
+/* 開いた時だけ表示 */
+.modal-overlay.is-open {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    background: rgba(0, 0, 0, .25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 28px 16px;
+}
+
+/* 白い箱（モーダル本体） */
+.modal-card {
+    width: min(900px, calc(100vw - 32px));
+    background: #fff;
+    border-radius: 10px;
+    padding: 26px 28px 22px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .15);
+}
+
+/* タイトル */
+.modal-title {
+    margin: 0 0 18px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* 入力をモーダル幅いっぱいに */
+.modal-card .form-input,
+.modal-card textarea {
+    width: 100%;
 }

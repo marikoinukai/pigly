@@ -56,7 +56,7 @@
             @endif
             </form>
 
-            <a class="btn btn-add" href="{{ route('weight_logs.create') }}">データ追加</a>
+            <button type="button" class="btn btn-add" data-modal-open="#createModal">データ追加</button>
         </div>
 
         <div class="result-info">
@@ -80,10 +80,6 @@
             @elseif($toText)
                 <p class="result-text">
                 {{ $toText }}以前の検索結果　{{ $count }}件
-                </p>
-            @else
-                <p class="result-text">
-                    全ての記録　{{ $count }}件
                 </p>
             @endif
         </div>
@@ -121,25 +117,77 @@
             </table>
 
             <div class="pagination">
-                {{ $logs->links() }}
+                {{ $logs->onEachSide(1)->links('vendor.pagination.pigly') }}
             </div>
         </div>
     </section>
+    {{-- 追加：登録モーダル --}}
+    <div id="createModal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true">
+            <h1 class="modal-title">Weight Logを追加</h1>
+
+            <form method="POST" action="{{ route('weight_logs.store') }}">
+            @include('weight_logs._form', ['log' => null])
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-ghost" data-modal-close>戻る</button>
+                    <button class="btn btn-primary" type="submit">登録</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 @endsection
 @section('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const inputs = document.querySelectorAll('.search-input[type="date"]');
-    if (inputs.length === 0) return;
+document.addEventListener('DOMContentLoaded', function () {
 
-
+  // ===== 既存：日付inputの薄色 =====
+  const inputs = document.querySelectorAll('.search-input[type="date"]');
+  if (inputs.length) {
     inputs.forEach(input => {
-    input.classList.toggle('is-empty', !input.value);
-    input.addEventListener('change', () => {
-    input.classList.toggle('is-empty', !input.value);
+      input.classList.toggle('is-empty', !input.value);
+      input.addEventListener('change', () => {
+        input.classList.toggle('is-empty', !input.value);
+      });
     });
+  }
+
+  // ===== 追加：モーダル =====
+  const openBtns = document.querySelectorAll('[data-modal-open]');
+  if (!openBtns.length) return; // ← index以外なら何もしない（減点回避）
+
+  const openModal = (selector) => {
+    const modal = document.querySelector(selector);
+    if (!modal) return;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+  };
+
+  const closeModal = (modal) => {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+  };
+
+  openBtns.forEach(btn => {
+    btn.addEventListener('click', () => openModal(btn.dataset.modalOpen));
+  });
+
+  document.querySelectorAll('[data-modal-close]').forEach(btn => {
+    btn.addEventListener('click', () => closeModal(btn.closest('.modal-overlay')));
+  });
+
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeModal(overlay);
     });
-    });
+  });
+
+  // バリデーションエラーがあるとき、自動でモーダルを開く
+    @if (!empty($openCreateModal) || $errors->any())
+        openModal('#createModal');
+    @endif
+
+});
 </script>
 @endsection

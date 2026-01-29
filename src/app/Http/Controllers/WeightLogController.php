@@ -33,8 +33,7 @@ class WeightLogController extends Controller
             $diffToTarget = round($latestWeight - $targetWeight, 1);
         }
 
-        $count = $logs->count();
-
+        $count = $logs->total();
         return view('weight_logs.index', compact('logs', 'target', 'diffToTarget', 'count'));
     }
 
@@ -55,7 +54,33 @@ class WeightLogController extends Controller
 
     public function create()
     {
-        return view('weight_logs.create');
+        $query = WeightLog::where('user_id', auth()->id());
+
+        // 検索（from/to）も同じにするならここも同様に
+        if (request('from')) {
+            $query->whereDate('date', '>=', request('from'));
+        }
+        if (request('to')) {
+            $query->whereDate('date', '<=', request('to'));
+        }
+
+        $logs = $query->orderBy('date', 'desc')->paginate(8);
+
+        $target = WeightTarget::where('user_id', auth()->id())->first();
+
+        $latestWeight = $logs->first() ? $logs->first()->weight : null;
+        $targetWeight = $target ? $target->target_weight : null;
+
+        $diffToTarget = null;
+        if (!is_null($latestWeight) && !is_null($targetWeight)) {
+            $diffToTarget = round($latestWeight - $targetWeight, 1);
+        }
+
+        $count = $logs->total();
+
+        return view('weight_logs.index', compact('logs', 'target', 'diffToTarget', 'count') + [
+            'openCreateModal' => true,
+        ]);
     }
 
     public function edit(WeightLog $weightLog)
