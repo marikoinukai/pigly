@@ -125,6 +125,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+    z-index: 10;
 }
 
 .dash-logo {
@@ -463,40 +465,6 @@
 }
 
 /* モーダル本体 */
-.modal-card {
-    width: min(520px, calc(100vw - 32px));
-    background: #fff;
-    /* border-radius: 10px; */
-    padding: 22px 26px 18px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, .15);
-    max-height: 85vh;
-    overflow-y: auto;
-}
-
-/* タイトル */
-.modal-title {
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0 0 14px;
-}
-
-.modal-field {
-    gap: 10px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 8px;
-}
-
-.modal-card .required-badge {
-    margin: 0;
-    /* ラベル横に置くのでリセット */
-    padding: 2px 6px;
-    font-size: 10px;
-    border-radius: 4px;
-    background: #ff4d4f;
-    color: #fff;
-}
 
 .modal-input-row {
     display: flex;
@@ -640,12 +608,12 @@
     box-sizing: border-box;
 }
 
-.delete-form {
+/* .delete-form {
     position: absolute;
     right: 24px;
     bottom: 24px;
     margin: 0;
-}
+} */
 
 .delete-btn {
     border: none;
@@ -680,10 +648,23 @@
 .edit-page .form-actions {
     margin-top: 32px;
     display: grid;
-    grid-template-columns: 160px 160px;
-    justify-content: center;
+    grid-template-columns: 1fr 160px 160px 1fr;
     gap: 24px;
     align-items: center;
+}
+
+/* 戻る・更新・ゴミ箱をそれぞれの列に固定 */
+.edit-page .form-actions .btn-ghost {
+    grid-column: 2;
+}
+
+.edit-page .form-actions .btn-primary {
+    grid-column: 3;
+}
+
+.edit-page .delete-form {
+    grid-column: 4;
+    justify-self: end;
 }
 
 /* 戻る/更新を同じ箱に */
@@ -697,53 +678,99 @@
     box-sizing: border-box;
 }
 
-/* モーダル本体：パディングを調整して中の要素が詰まらないようにする */
+/* 編集画面：単位を枠の外に出す（外出しモード） */
+.edit-page .input-unit--outer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+/* 重ね表示を無効化 */
+.edit-page .input-unit--outer .unit-text {
+    position: static;
+    transform: none;
+    white-space: nowrap;
+    font-size: 14px;
+    color: #999;
+}
+
+/* inputはしっかり伸ばす（小さくなるのを防ぐ） */
+.edit-page .input-unit--outer .form-input {
+    width: 100%;
+    flex: 1;
+    padding-right: 12px;
+    flex-grow: 1;
+    /* 重ね用の余白を戻す */
+}
+
+/* 編集画面：タイトルを左寄せ */
+.edit-page .card-title {
+    text-align: left;
+}
+
+/* 編集画面：運動内容を大きく */
+.edit-page textarea[name="exercise_content"] {
+    min-height: 160px;
+    /* 見本に近い */
+    resize: none;
+    /* 角のつまみを消す */
+}
+
+/* 編集画面：ゴミ箱を赤く目立たせる */
+.edit-page .delete-btn {
+    color: #ff4d4f;
+    font-size: 20px;
+}
+
+.edit-page .delete-btn:hover {
+    opacity: 0.7;
+}
+
+.edit-page .delete-form {
+    grid-column: 4;
+    justify-self: end;
+}
+
+/* ===== モーダル余白の最終調整（ファイルの一番下に置く） ===== */
 .modal-card {
     width: min(520px, calc(100vw - 32px));
     background: #fff;
     border-radius: 10px;
-    /* 角丸を復活させる場合 */
     padding: 30px 40px;
-    /* 左右の余白を少し広げると見栄えが良くなります */
     box-shadow: 0 12px 40px rgba(0, 0, 0, .15);
     max-height: 85vh;
     overflow-y: auto;
 }
 
-/* タイトル：下の余白を広げて入力欄との距離を作る */
+/* 見出しが詰まる対策：上と下の余白を明示 */
 .modal-title {
     font-size: 20px;
     font-weight: 700;
-    margin-bottom: 24px;
-    /* 14pxから24pxに広げる */
+    margin: 6px 0 24px;
+    /* ← 上6px / 下24px */
     color: #333;
 }
 
-/* 各入力フィールド：上下の余白を確保する */
 .modal-field {
     margin-bottom: 20px;
-    /* 8pxから20pxに広げる */
 }
 
-/* ラベル：テキストとバッジの横並びを整え、入力欄との隙間を作る */
 .modal-label {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-bottom: 8px;
-    /* ラベルと入力欄の間の余白 */
     font-size: 14px;
-    /* 少し大きくすると読みやすいです */
     font-weight: 600;
 }
 
-/* 必須バッジ：文字のベースラインを整える */
 .modal-card .required-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    margin: 0;
+    /* ラベル横に置くのでリセット */
     padding: 2px 6px;
     font-size: 10px;
-    height: 18px;
-    /* 高さを固定すると並びが綺麗になります */
+    border-radius: 4px;
+    background: #ff4d4f;
+    color: #fff;
 }
