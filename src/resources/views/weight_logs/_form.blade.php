@@ -1,32 +1,93 @@
 {{-- resources/views/weight_logs/_form.blade.php --}}
 @csrf
 
-<div class="form-group">
-  <label class="form-label">日付 <span class="required-badge">必須</span></label>
-  <input class="form-input" type="date" name="date" value="{{ old('date', $log->date ?? now()->toDateString()) }}">
-  @error('date') <p class="error-message">{{ $message }}</p> @enderror
+<div class="modal-field">
+  <div class="modal-label">
+    <span>日付</span>
+    <span class="required-badge">必須</span>
+  </div>
+
+  {{-- 表示用（年 月 日） --}}
+  <input
+    type="text"
+    class="modal-input js-date-display"
+    readonly
+  >
+
+  {{-- 実際に送信する date --}}
+  <input
+    type="date"
+    name="date"
+    class="js-date-real"
+    value="{{ old('date', now()->toDateString()) }}"
+    hidden
+  >
+
+  @error('date') <p class="modal-error">{{ $message }}</p> @enderror
 </div>
 
-<div class="form-group">
-  <label class="form-label">体重 <span class="required-badge">必須</span></label>
-  <input class="form-input" type="text" name="weight" value="{{ old('weight', $log->weight ?? '') }}">
-  @error('weight') <p class="error-message">{{ $message }}</p> @enderror
+<div class="modal-field">
+  <div class="modal-label">
+    <span>体重</span>
+    <span class="required-badge">必須</span>
+  </div>
+
+  <div class="modal-input-row">
+    <input
+      class="modal-input"
+      type="text"
+      name="weight"
+      placeholder="50.0"
+      value="{{ old('weight') }}"
+    >
+    <span class="modal-unit">kg</span>
+  </div>
+  @error('weight') <p class="modal-error">{{ $message }}</p> @enderror
 </div>
 
-<div class="form-group">
-  <label class="form-label">摂取カロリー <span class="required-badge">必須</span></label>
-  <input class="form-input" type="text" name="calories" value="{{ old('calories', $log->calories ?? '') }}">
-  @error('calories') <p class="error-message">{{ $message }}</p> @enderror
+<div class="modal-field">
+  <div class="modal-label">
+    <span>摂取カロリー</span>
+    <span class="required-badge">必須</span>
+  </div>
+
+  <div class="modal-input-row">
+    <input
+      class="modal-input"
+      type="text"
+      name="calories"
+      placeholder="1200"
+      value="{{ old('calories') }}"
+    >
+    <span class="modal-unit">cal</span>
+  </div>
+  @error('calories') <p class="modal-error">{{ $message }}</p> @enderror
 </div>
 
-<div class="form-group">
-  <label class="form-label">運動時間 <span class="required-badge">必須</span></label>
-  <input class="form-input" type="time" name="exercise_time" value="{{ old('exercise_time', isset($log->exercise_time) ? \Carbon\Carbon::createFromFormat('H:i:s',$log->exercise_time)->format('H:i') : '') }}">
-  @error('exercise_time') <p class="error-message">{{ $message }}</p> @enderror
+<div class="modal-field">
+  <div class="modal-label">
+    <span>運動時間</span>
+    <span class="required-badge">必須</span>
+  </div>
+
+  <input
+    class="modal-input"
+    type="time"
+    name="exercise_time"
+    value="{{ old('exercise_time') }}"
+  >
+  @error('exercise_time') <p class="modal-error">{{ $message }}</p> @enderror
 </div>
 
-<div class="form-group">
-  <label class="form-label">運動内容</label>
-  <textarea class="form-input" name="exercise_content">{{ old('exercise_content', $log->exercise_content ?? '') }}</textarea>
-  @error('exercise_content') <p class="error-message">{{ $message }}</p> @enderror
+<div class="modal-field">
+  <div class="modal-label">
+    <span>運動内容</span>
+  </div>
+
+  <textarea
+    class="modal-input modal-textarea"
+    name="exercise_content"
+    placeholder="運動内容を追加"
+  >{{ old('exercise_content') }}</textarea>
+  @error('exercise_content') <p class="modal-error">{{ $message }}</p> @enderror
 </div>

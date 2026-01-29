@@ -140,6 +140,9 @@
 @endsection
 @section('scripts')
 <script>
+const indexUrl  = "{{ route('weight_logs.index') }}";
+const createUrl = "{{ route('weight_logs.create') }}";
+
 document.addEventListener('DOMContentLoaded', function () {
 
   // ===== 既存：日付inputの薄色 =====
@@ -153,41 +156,75 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ===== 追加：モーダル =====
-  const openBtns = document.querySelectorAll('[data-modal-open]');
-  if (!openBtns.length) return; // ← index以外なら何もしない（減点回避）
+  // ===== モーダル =====
+  const modal = document.querySelector('#createModal');
+  if (!modal) return;
 
-  const openModal = (selector) => {
-    const modal = document.querySelector(selector);
-    if (!modal) return;
-    modal.classList.add('is-open');
-    modal.setAttribute('aria-hidden', 'false');
+  const openModal = (selector, pushUrl = null) => {
+    const m = document.querySelector(selector);
+    if (!m) return;
+
+    m.classList.add('is-open');
+    m.setAttribute('aria-hidden', 'false');
+
+    // indexから開いた時だけURLを /create にする
+    if (pushUrl) history.pushState({ modal: true }, "", pushUrl);
   };
 
-  const closeModal = (modal) => {
-    modal.classList.remove('is-open');
-    modal.setAttribute('aria-hidden', 'true');
+  const closeModal = (m) => {
+    m.classList.remove('is-open');
+    m.setAttribute('aria-hidden', 'true');
+
+    // URLを /weight_logs に戻す
+    history.replaceState({}, "", indexUrl);
   };
 
-  openBtns.forEach(btn => {
-    btn.addEventListener('click', () => openModal(btn.dataset.modalOpen));
+  // 開く（データ追加ボタン）
+  document.querySelectorAll('[data-modal-open]').forEach(btn => {
+    btn.addEventListener('click', () => openModal(btn.dataset.modalOpen, createUrl));
   });
 
+  // 閉じる（戻るボタン）
   document.querySelectorAll('[data-modal-close]').forEach(btn => {
-    btn.addEventListener('click', () => closeModal(btn.closest('.modal-overlay')));
+    btn.addEventListener('click', () => closeModal(modal));
   });
 
-  document.querySelectorAll('.modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) closeModal(overlay);
-    });
+  // 背景クリックで閉じる
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal(modal);
   });
 
-  // バリデーションエラーがあるとき、自動でモーダルを開く
-    @if (!empty($openCreateModal) || $errors->any())
-        openModal('#createModal');
-    @endif
+  // /createで来た or バリデーションエラーなら最初から開く
+  @if (!empty($openCreateModal) || $errors->any())
+    openModal('#createModal');
+  @endif
 
+  // ===== 日付表示を「YYYY年M月D日」に変換（表示用input）=====
+document.querySelectorAll('.js-date-display').forEach(display => {
+  // 同じ modal-field の中にある「本物のdate」を探す
+  const real = display.closest('.modal-field')?.querySelector('.js-date-real');
+  if (!real) return;
+
+  const format = (v) => {
+    if (!v) return '';
+    const [y, m, d] = v.split('-');
+    return `${y}年${Number(m)}月${Number(d)}日`;
+  };
+
+  // 初期表示
+  display.value = format(real.value);
+
+  // 表示欄クリックで日付ピッカーを開く（対応ブラウザ）
+  display.addEventListener('click', () => {
+    if (real.showPicker) real.showPicker();
+    else real.focus(); // showPicker非対応の保険
+  });
+
+  // 日付が変わったら表示更新
+  real.addEventListener('change', () => {
+    display.value = format(real.value);
+  });
+});
 });
 </script>
 @endsection

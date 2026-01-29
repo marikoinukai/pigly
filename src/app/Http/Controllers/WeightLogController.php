@@ -2,39 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreWeightLogRequest;
 use App\Models\WeightLog;
 use App\Models\WeightTarget;
 
 class WeightLogController extends Controller
 {
-    public function index()
+    private function buildIndexData(Request $request): array
     {
         $query = WeightLog::where('user_id', auth()->id());
 
-        // 検索（from/to）
-        if (request('from')) {
-            $query->whereDate('date', '>=', request('from'));
-        }
-        if (request('to')) {
-            $query->whereDate('date', '<=', request('to'));
-        }
+        if ($request->filled('from')) $query->whereDate('date', '>=', $request->from);
+        if ($request->filled('to'))   $query->whereDate('date', '<=', $request->to);
 
         $logs = $query->orderBy('date', 'desc')->paginate(8);
-
         $target = WeightTarget::where('user_id', auth()->id())->first();
 
-        // 目標までの差分
-        $latestWeight = $logs->first() ? $logs->first()->weight : null;
-        $targetWeight = $target ? $target->target_weight : null;
+        $latestWeight = optional($logs->first())->weight;
+        $targetWeight = optional($target)->target_weight;
 
-        $diffToTarget = null;
-        if (!is_null($latestWeight) && !is_null($targetWeight)) {
-            $diffToTarget = round($latestWeight - $targetWeight, 1);
-        }
+        $diffToTarget = (!is_null($latestWeight) && !is_null($targetWeight))
+            ? round($latestWeight - $targetWeight, 1)
+            : null;
 
-        $count = $logs->total();
-        return view('weight_logs.index', compact('logs', 'target', 'diffToTarget', 'count'));
+        return [
+            'logs' => $logs,
+            'target' => $target,
+            'diffToTarget' => $diffToTarget,
+            'count' => $logs->total(),
+        ];
+    }
+    public function index(Request $request)
+    {
+        $data = $this->buildIndexData($request);
+        return view('weight_logs.index', $data);
+    }
+
+    public function create(Request $request)
+    {
+        $data = $this->buildIndexData($request);
+        return view('weight_logs.index', $data)->with('openCreateModal', true);
     }
 
     public function store(StoreWeightLogRequest $request)
@@ -50,37 +58,6 @@ class WeightLogController extends Controller
 
 
         return redirect()->route('weight_logs.index');
-    }
-
-    public function create()
-    {
-        $query = WeightLog::where('user_id', auth()->id());
-
-        // 検索（from/to）も同じにするならここも同様に
-        if (request('from')) {
-            $query->whereDate('date', '>=', request('from'));
-        }
-        if (request('to')) {
-            $query->whereDate('date', '<=', request('to'));
-        }
-
-        $logs = $query->orderBy('date', 'desc')->paginate(8);
-
-        $target = WeightTarget::where('user_id', auth()->id())->first();
-
-        $latestWeight = $logs->first() ? $logs->first()->weight : null;
-        $targetWeight = $target ? $target->target_weight : null;
-
-        $diffToTarget = null;
-        if (!is_null($latestWeight) && !is_null($targetWeight)) {
-            $diffToTarget = round($latestWeight - $targetWeight, 1);
-        }
-
-        $count = $logs->total();
-
-        return view('weight_logs.index', compact('logs', 'target', 'diffToTarget', 'count') + [
-            'openCreateModal' => true,
-        ]);
     }
 
     public function edit(WeightLog $weightLog)
