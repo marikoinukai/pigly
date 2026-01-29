@@ -47,12 +47,19 @@ class WeightLogController extends Controller
 
     public function store(StoreWeightLogRequest $request)
     {
+        $exerciseTime = null;
+        if ($request->filled('exercise_duration')) {
+
+            // 01:30 → 01:30:00
+            $exerciseTime = $request->exercise_duration . ':00';
+        }
+
         WeightLog::create([
             'user_id' => auth()->id(),
             'date' => $request->date,
             'weight' => $request->weight,
             'calories' => $request->calories,
-            'exercise_time' => $request->exercise_time,
+            'exercise_time' => $exerciseTime,
             'exercise_content' => $request->exercise_content,
         ]);
 

@@ -10,7 +10,8 @@
   {{-- 表示用（年 月 日） --}}
   <input
     type="text"
-    class="modal-input js-date-display"
+    class="modal-input js-date-display is-empty"
+    data-placeholder="年/月/日"
     readonly
   >
 
@@ -19,7 +20,7 @@
     type="date"
     name="date"
     class="js-date-real"
-    value="{{ old('date', now()->toDateString()) }}"
+    value="{{ old('date') }}"
     hidden
   >
 
@@ -71,12 +72,15 @@
   </div>
 
   <input
-    class="modal-input"
-    type="time"
-    name="exercise_time"
-    value="{{ old('exercise_time') }}"
+  class="modal-input"
+  type="text"
+  name="exercise_duration"
+  placeholder="00:00"
+  value="{{ old('exercise_duration') }}"
   >
-  @error('exercise_time') <p class="modal-error">{{ $message }}</p> @enderror
+  @error('exercise_duration') 
+    <p class="modal-error">{{ $message }}</p> 
+  @enderror
 </div>
 
 <div class="modal-field">

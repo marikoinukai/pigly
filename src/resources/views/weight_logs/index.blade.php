@@ -104,7 +104,9 @@
                         <td>{{ $log->weight }}kg</td>
                         <td>{{ $log->calories }}kcal</td>
                         <td>
-                            {{ $log->exercise_time ? \Carbon\Carbon::createFromFormat('H:i:s', $log->exercise_time)->format('H:i') : '' }}
+                            @if($log->exercise_time)
+                            {{ \Carbon\Carbon::parse($log->exercise_time)->format('H:i') }}
+                            @endif
                         </td>
                         <td class="edit-col">
                         <a class="edit-link" href="{{ route('weight_logs.edit', $log) }}">✎</a>
@@ -201,9 +203,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ===== 日付表示を「YYYY年M月D日」に変換（表示用input）=====
 document.querySelectorAll('.js-date-display').forEach(display => {
-  // 同じ modal-field の中にある「本物のdate」を探す
   const real = display.closest('.modal-field')?.querySelector('.js-date-real');
   if (!real) return;
+
+  const placeholder = display.dataset.placeholder || '年/月/日';
 
   const format = (v) => {
     if (!v) return '';
@@ -211,19 +214,27 @@ document.querySelectorAll('.js-date-display').forEach(display => {
     return `${y}年${Number(m)}月${Number(d)}日`;
   };
 
-  // 初期表示
-  display.value = format(real.value);
+  const updateDisplay = () => {
+    if (real.value) {
+      display.value = format(real.value);
+      display.classList.remove('is-empty');
+    } else {
+      display.value = placeholder;
+      display.classList.add('is-empty');
+    }
+  };
 
-  // 表示欄クリックで日付ピッカーを開く（対応ブラウザ）
+  // 初期表示
+  updateDisplay();
+
+  // 表示欄クリックで日付ピッカーを開く
   display.addEventListener('click', () => {
     if (real.showPicker) real.showPicker();
-    else real.focus(); // showPicker非対応の保険
+    else real.focus();
   });
 
   // 日付が変わったら表示更新
-  real.addEventListener('change', () => {
-    display.value = format(real.value);
-  });
+  real.addEventListener('change', updateDisplay);
 });
 });
 </script>
