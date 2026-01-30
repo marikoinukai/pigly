@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WeightLogController;
 use App\Http\Controllers\WeightTargetController;
+use App\Http\Controllers\Auth\RegisterStep1Controller;
+use App\Http\Controllers\Auth\RegisterStep2Controller;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +27,12 @@ Route::get('/dev-login', function () {
     return redirect()->route('weight_logs.index');
 });
 // ↑最後に削除
+
+Route::get('/register/step1', [RegisterStep1Controller::class, 'create'])->name('register.step1');
+Route::post('/register/step1', [RegisterStep1Controller::class, 'store']);
+
+Route::get('/register/step2', [RegisterStep2Controller::class, 'create'])->name('register.step2');
+Route::post('/register/step2', [RegisterStep2Controller::class, 'store']);
 
 Route::get('/weight_logs/goal_setting', [WeightTargetController::class, 'edit'])
     ->middleware('auth')
