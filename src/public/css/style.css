@@ -121,7 +121,8 @@
     background: #fff;
     border-bottom: 1px solid #eee;
     margin: 0;
-    padding: 10px 16px;
+    padding: 12px 24px;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -137,20 +138,24 @@
 
 .dash-actions {
     display: flex;
+    align-items: center;
     gap: 10px;
+    flex-shrink: 0;
 }
 
 .dash-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 8px 12px;
-    border-radius: 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
     border: 1px solid #ddd;
     background: #f4f4f4;
     text-decoration: none;
     color: #333;
-    font-size: 12px;
+    border: 1px solid #ddd;
+    font-size: 13px;
+    white-space: nowrap;
 }
 
 .dash-btn:focus {

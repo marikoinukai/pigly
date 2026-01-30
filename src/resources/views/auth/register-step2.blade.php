@@ -19,7 +19,7 @@
           step="0.1"
           name="current_weight"
           value="{{ old('current_weight') }}"
-          placeholder="例）50.5"
+          placeholder="現在の体重を入力"
         >
         <span class="form-unit">kg</span>
       </div>
@@ -38,7 +38,7 @@
           step="0.1"
           name="target_weight"
           value="{{ old('target_weight') }}"
-          placeholder="例）48.0"
+          placeholder="目標の体重を入力"
         >
         <span class="form-unit">kg</span>
       </div>
