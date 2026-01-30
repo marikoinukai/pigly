@@ -7,6 +7,7 @@ use App\Http\Controllers\WeightLogController;
 use App\Http\Controllers\WeightTargetController;
 use App\Http\Controllers\Auth\RegisterStep1Controller;
 use App\Http\Controllers\Auth\RegisterStep2Controller;
+use Illuminate\Http\Request;
 
 
 /*
@@ -19,14 +20,6 @@ use App\Http\Controllers\Auth\RegisterStep2Controller;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-// 最後に削除↓
-Route::get('/dev-login', function () {
-    $user = User::first(); // 1人目のユーザーでログイン（適宜変更）
-    Auth::login($user);
-    return redirect()->route('weight_logs.index');
-});
-// ↑最後に削除
 
 Route::get('/register/step1', [RegisterStep1Controller::class, 'create'])->name('register.step1');
 Route::post('/register/step1', [RegisterStep1Controller::class, 'store']);
@@ -62,3 +55,16 @@ Route::post('/weight_logs/{weightLog}/update', [WeightLogController::class, 'upd
 
 Route::post('/weight_logs/{weightLog}/delete', [WeightLogController::class, 'destroy'])
     ->middleware('auth');
+
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect('/login');
+})->name('logout');
+
+Route::get('/home', function () {
+    return redirect('/weight_logs');
+})->middleware('auth');

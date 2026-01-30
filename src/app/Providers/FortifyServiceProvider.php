@@ -37,12 +37,8 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.login');
         });
 
-        Fortify::registerView(function () {
-            return view('auth.register');
-        });
-
         Fortify::redirects('register', '/weight_logs/goal_setting');
-        Fortify::redirects('login', '/weight_logs/goal_setting');
+        Fortify::redirects('login', '/weight_logs');
 
 
         RateLimiter::for('login', function (Request $request) {
@@ -54,5 +50,7 @@ class FortifyServiceProvider extends ServiceProvider
         RateLimiter::for('two-factor', function (Request $request) {
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
+
+        Fortify::redirects('logout', '/login');
     }
 }
