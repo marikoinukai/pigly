@@ -3,10 +3,10 @@
 @section('content')
 <div class="auth-card">
   <div class="auth-logo">PiGLy</div>
-  <h1 class="auth-title">初期体重登録</h1>
+  <h1 class="auth-title">新規会員登録</h1>
   <p class="auth-step">STEP2 体重データの入力</p>
 
-  <form class="auth-form" method="POST" action="{{ url('/register/step2') }}">
+  <form class="auth-form" method="POST" action="{{ url('/register/step2') }}" novalidate>
     @csrf
 
     <div class="form-group">
@@ -15,9 +15,10 @@
         <input
           id="current_weight"
           class="form-input @error('current_weight') is-invalid @enderror"
-          type="number"
+          type="text"
           step="0.1"
           name="current_weight"
+          inputmode="decimal"
           value="{{ old('current_weight') }}"
           placeholder="現在の体重を入力"
         >
@@ -34,9 +35,10 @@
         <input
           id="target_weight"
           class="form-input @error('target_weight') is-invalid @enderror"
-          type="number"
+          type="text"
           step="0.1"
           name="target_weight"
+          inputmode="decimal"
           value="{{ old('target_weight') }}"
           placeholder="目標の体重を入力"
         >

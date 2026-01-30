@@ -6,11 +6,14 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -52,5 +55,19 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::redirects('logout', '/login');
+
+        Fortify::authenticateUsing(function ($request) {
+            $form = app(LoginRequest::class);
+            $form->merge($request->all());
+            $form->validateResolved();
+
+            if (Auth::attempt($request->only('email', 'password'))) {
+                return Auth::user();
+            }
+
+            throw ValidationException::withMessages([
+                'email' => [__('auth.failed')],
+            ]);
+        });
     }
 }

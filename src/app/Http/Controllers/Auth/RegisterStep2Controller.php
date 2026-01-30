@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\RegisterStep2Request;
 
 use App\Models\User;
 use App\Models\WeightLog;
@@ -24,16 +25,13 @@ class RegisterStep2Controller extends Controller
         return view('auth.register-step2');
     }
 
-    public function store(Request $request)
+    public function store(RegisterStep2Request $request)
     {
         if (!$request->session()->has('register.step1')) {
             return redirect()->route('register.step1');
         }
 
-        $validated = $request->validate([
-            'current_weight' => ['required', 'numeric', 'min:1', 'max:999.9'],
-            'target_weight'  => ['required', 'numeric', 'min:1', 'max:999.9'],
-        ]);
+        $validated = $request->validated();
 
         $step1 = $request->session()->get('register.step1');
 
@@ -41,7 +39,7 @@ class RegisterStep2Controller extends Controller
             $user = User::create([
                 'name'     => $step1['name'],
                 'email'    => $step1['email'],
-                'password' => $step1['password'], // Step1でHash済みの前提
+                'password' => $step1['password'],
             ]);
 
             WeightTarget::create([

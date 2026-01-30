@@ -6,13 +6,13 @@
   <h1 class="auth-title">新規会員登録</h1>
   <p class="auth-step">STEP1 アカウント情報の登録</p>
 
-  <form class="auth-form" method="POST" action="{{ url('/register/step1') }}">
+  <form class="auth-form" method="POST" action="{{ url('/register/step1') }}" novalidate>
     @csrf
 
     <div class="form-group">
       <label class="form-label" for="name">お名前</label>
       <input id="name" class="form-input @error('name') is-invalid @enderror"
-             type="text" name="name" value="{{ old('name') }}" placeholder="お名前を入力">
+             type="text" name="name" value="{{ old('name') }}" placeholder="名前を入力">
       @error('name')
         <p class="form-error">{{ $message }}</p>
       @enderror
