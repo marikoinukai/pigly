@@ -774,3 +774,12 @@
     background: #ff4d4f;
     color: #fff;
 }
+
+.goal-page .card-title {
+    text-align: center;
+}
+
+.dashboard.edit-bg .dash-header {
+    position: relative;
+    z-index: 10;
+}

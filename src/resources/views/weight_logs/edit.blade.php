@@ -6,15 +6,11 @@
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 @endsection
 
+@section('header')
+  @include('components.dashboard-header')
+@endsection
+
 @section('content')
-
-<header class="dash-header">
-  <div class="dash-logo">PiGLy</div>
-
-  <div class="dash-actions">
-    <a class="dash-btn" href="{{ route('weight_targets.edit') }}">目標体重設定</a>
-  </div>
-</header>
 
 <div class="app-main edit-page">
   <div class="app-container">

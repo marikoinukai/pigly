@@ -1,16 +1,13 @@
 @extends('layouts.app')
 @section('body_class', 'dashboard')
 
+@section('header')
+  @include('components.dashboard-header')
+@endsection
+
 @section('content')
 
-<header class="dash-header">
-    <div class="dash-logo">PiGLy</div>
 
-    <div class="dash-actions">
-        <a class="dash-btn" href="{{ route('weight_targets.edit') }}">目標体重設定</a>
-        {{-- ログアウトは Fortify導入後にフォームに差し替え --}}
-    </div>
-</header>
 
 <div class="dash-shell">
 

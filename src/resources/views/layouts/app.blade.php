@@ -9,6 +9,7 @@
 
 </head>
 <body class="app-bg @yield('body_class')">
+    @yield('header')
     @if (trim($__env->yieldContent('body_class')) === 'dashboard')
         @yield('content')
     @else
