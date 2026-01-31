@@ -7,8 +7,6 @@
 
 @section('content')
 
-
-
 <div class="dash-shell">
 
     <section class="summary-card-wide">
