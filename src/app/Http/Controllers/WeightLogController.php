@@ -48,10 +48,10 @@ class WeightLogController extends Controller
     public function store(StoreWeightLogRequest $request)
     {
         $exerciseTime = null;
-        if ($request->filled('exercise_duration')) {
+        if ($request->filled('exercise_time')) {
 
             // 01:30 → 01:30:00
-            $exerciseTime = $request->exercise_duration . ':00';
+            $exerciseTime = $request->exercise_time . ':00';
         }
 
         WeightLog::create([
@@ -76,11 +76,14 @@ class WeightLogController extends Controller
 
     public function update(StoreWeightLogRequest $request, WeightLog $weightLog)
     {
-        if ($weightLog->user_id !== auth()->id()) {
-            abort(403);
-        }
+        if ($weightLog->user_id !== auth()->id()) abort(403);
 
-        $weightLog->update($request->validated());
+        $validated = $request->validated();
+
+        // 12:34 → 12:34:00 に変換してDBへ
+        $validated['exercise_time'] = $validated['exercise_time'] . ':00';
+
+        $weightLog->update($validated);
 
         return redirect()->route('weight_logs.index');
     }

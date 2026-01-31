@@ -51,7 +51,7 @@ class StoreWeightLogRequest extends FormRequest
                 },
             ],
             'calories' => ['required', 'integer'],
-            'exercise_duration' => ['required', 'regex:/^\d{1,2}:\d{2}$/'],
+            'exercise_time' => ['required', 'regex:/^\d{1,2}:\d{2}$/'],
             'exercise_content' => ['nullable', 'string', 'max:120'],
         ];
     }
@@ -71,8 +71,8 @@ class StoreWeightLogRequest extends FormRequest
             'calories.integer'  => '数字で入力してください',
 
             // 運動時間（B案）
-            'exercise_duration.required' => '運動時間を入力してください',
-            'exercise_duration.regex' => '運動時間を入力してください（例：01:30）',
+            'exercise_time.required' => '運動時間を入力してください',
+            'exercise_time.regex' => '運動時間を入力してください（例：01:30）',
 
             // 運動内容
             'exercise_content.max' => '120文字以内で入力してください',
@@ -85,7 +85,7 @@ class StoreWeightLogRequest extends FormRequest
             'date' => '日付',
             'weight' => '体重',
             'calories' => '摂取カロリー',
-            'exercise_duration' => '運動時間',
+            'exercise_time' => '運動時間',
             'exercise_content' => '運動内容',
         ];
     }

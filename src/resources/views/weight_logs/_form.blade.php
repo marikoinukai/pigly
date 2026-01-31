@@ -74,11 +74,11 @@
   <input
   class="modal-input"
   type="text"
-  name="exercise_duration"
+  name="exercise_time"
   placeholder="00:00"
-  value="{{ old('exercise_duration') }}"
+  value="{{ old('exercise_time') }}"
   >
-  @error('exercise_duration') 
+  @error('exercise_time') 
     <p class="modal-error">{{ $message }}</p> 
   @enderror
 </div>

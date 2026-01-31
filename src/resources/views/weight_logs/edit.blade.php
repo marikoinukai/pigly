@@ -58,11 +58,11 @@
           <label class="form-label">運動時間</label>
           <input class="form-input" 
             type="text"
-            name="exercise_duration"
+            name="exercise_time"
             placeholder="00:00"
-            value="{{ old('exercise_duration', $weightLog->exercise_time ? \Carbon\Carbon::parse($weightLog->exercise_time)->format('H:i') : '') }}"
+            value="{{ old('exercise_time', $weightLog->exercise_time ? \Carbon\Carbon::parse($weightLog->exercise_time)->format('H:i') : '') }}"
           >
-        @error('exercise_duration') <p class="modal-error">{{ $message }}</p> @enderror
+        @error('exercise_time') <p class="modal-error">{{ $message }}</p> @enderror
         </div>
 
         <div class="form-group">
@@ -74,13 +74,13 @@
         <div class="form-actions">
           <a class="btn btn-ghost" href="{{ route('weight_logs.index') }}">戻る</a>
           <button class="btn btn-primary" type="submit">更新</button>
-
-          <form class="delete-form" action="/weight_logs/{{ $weightLog->id }}/delete" method="POST">
-            @csrf
-            <button class="delete-btn" type="submit" aria-label="削除">🗑</button>
-          </form>
-        </div>
-     </div>
+      </form>
+      <form class="delete-form" action="/weight_logs/{{ $weightLog->id }}/delete" method="POST">
+        @csrf
+        <button class="delete-btn" type="submit" aria-label="削除">🗑</button>
+      </form>
+      </div>
+    </div>
   </div>
 </div>
 @endsection

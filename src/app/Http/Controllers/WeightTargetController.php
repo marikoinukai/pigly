@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\WeightTarget;
+use App\Http\Requests\UpdateWeightTargetRequest;
 
 class WeightTargetController extends Controller
 {
@@ -16,11 +17,9 @@ class WeightTargetController extends Controller
     }
 
 
-    public function update(Request $request)
+    public function update(UpdateWeightTargetRequest $request)
     {
-        $validated = $request->validate([
-            'target_weight' => ['required', 'numeric'],
-        ]);
+        $validated = $request->validated();
 
 
         WeightTarget::updateOrCreate(
