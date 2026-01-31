@@ -131,9 +131,16 @@
 }
 
 .dash-logo {
-    font-size: 22px;
-    font-weight: 700;
-    color: #d36ad6;
+    font-family: "Times New Roman", Georgia, "Noto Serif JP", serif;
+    font-size: 27px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-align: center;
+    line-height: 1;
+
+    background: linear-gradient(90deg, #b49dff, #ff9ccf);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .dash-actions {
@@ -191,7 +198,7 @@
 }
 
 .summary-item {
-    padding: 0 18px;
+    padding: 0 30px;
 }
 
 .summary-divider {
@@ -270,6 +277,7 @@
 }
 
 .search-btn {
+    min-width: 70px;
     padding: 8px 12px;
     border: none;
     border-radius: 6px;
@@ -280,7 +288,9 @@
 }
 
 .reset-btn {
-    padding: 8px 10px;
+    text-align: center;
+    padding: 8px 0px;
+    min-width: 70px;
     border-radius: 6px;
     text-decoration: none;
     background: #e9e9e9;
@@ -318,19 +328,24 @@
 }
 
 .log-table th {
-    text-align: left;
+    text-align: center;
     font-size: 15px;
     font-weight: 700;
     color: #555;
     padding: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 3px solid #eee;
 }
 
 .log-table td {
+    text-align: center;
     padding: 10px;
     border-bottom: 1px solid #f2f2f2;
     font-size: 13px;
     color: #333;
+}
+
+.log-table tbody tr:hover {
+    background-color: #f2f3f8;
 }
 
 .edit-col {
@@ -453,6 +468,7 @@
 /* 普段は非表示 */
 .modal-overlay {
     display: none;
+    pointer-events: none;
 }
 
 /* 開いた時だけ表示 */
@@ -463,6 +479,7 @@
 
     background: rgba(0, 0, 0, .25);
     display: flex;
+    pointer-events: auto;
     align-items: center;
     justify-content: center;
 
@@ -612,13 +629,6 @@
     width: 100%;
     box-sizing: border-box;
 }
-
-/* .delete-form {
-    position: absolute;
-    right: 24px;
-    bottom: 24px;
-    margin: 0;
-} */
 
 .delete-btn {
     border: none;

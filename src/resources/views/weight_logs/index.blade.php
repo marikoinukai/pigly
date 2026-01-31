@@ -99,7 +99,7 @@
                     <tr>
                         <td>{{\Carbon\Carbon::parse($log->date)->format('Y/m/d')}}</td>
                         <td>{{ $log->weight }}kg</td>
-                        <td>{{ $log->calories }}kcal</td>
+                        <td>{{ $log->calories }}cal</td>
                         <td>
                             @if($log->exercise_time)
                             {{ \Carbon\Carbon::parse($log->exercise_time)->format('H:i') }}
